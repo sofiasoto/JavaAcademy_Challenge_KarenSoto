@@ -3,14 +3,25 @@ package com.javaacademy.theatreproject;
 public class Seat implements Comparable<Seat> {
     private int row;
     private String line;
-    private double price;
+    private int price;
     private boolean reserved = false;
 
-    public Seat(int seatNum, String line, double price, boolean reserved) {
+    public Seat(int seatNum, String line, int price, boolean reserved) {
         this.row = seatNum;
         this.line = line;
         this.price = price;
         this.reserved = reserved;
+    }
+    
+    public Seat(int seatNum, String line, int price) {
+        this.row = seatNum;
+        this.line = line;
+        this.price = price;
+    }
+    
+    public Seat(int seatNum, String line) {
+        this.row = seatNum;
+        this.line = line;
     }
     public String getLine() {
         return line;
@@ -24,10 +35,10 @@ public class Seat implements Comparable<Seat> {
     public void setRow(int row) {
         this.row = row;
     }
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
     public boolean isReserved() {
@@ -37,29 +48,26 @@ public class Seat implements Comparable<Seat> {
         this.reserved = reserved;
     }
     
-    public boolean reserve(Seat seat){
+    public Seat reserve(Seat seat){
         if (!seat.isReserved()) {
             seat.setReserved(true);
-            System.out.println("Seat " + seat.getRow() + " reserved");
-            return true;
+            System.out.println("Seat " + seat.getLine() + seat.getRow() + " reserved");
+            return seat;
         } else {
-            return false;
+        	 System.out.println("Seat " + seat.getLine() + seat.getRow() + " not reserved");
+            return null;
         }
     }
 
     public boolean cancelReservation(Seat seat){
-        if (seat.isReserved()) {
+        if (seat.isReserved()==true) {
             seat.setReserved(false);
-            System.out.println("Reservation of seat " + seat.getRow() + " cancelled");
+            System.out.println("Reservation of seat " + seat.getLine() + seat.getRow() + " cancelled");
             return true;
         } else {
+        	System.out.println("The seat is not reserved " + seat.getLine() + seat.getRow());
             return false;
         }
-    }
-
-    /**Will show free, reserved and total amount of sold seats, free and reserved */
-    public void print(){
-        
     }
 
     @Override

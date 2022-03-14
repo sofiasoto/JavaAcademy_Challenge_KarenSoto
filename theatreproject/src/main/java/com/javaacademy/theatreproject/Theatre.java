@@ -3,6 +3,7 @@ package com.javaacademy.theatreproject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Theatre {
     //having a 8x8 theatre+
@@ -41,28 +42,83 @@ public class Theatre {
         this.seatList = seatList;
     }
 
-    public boolean reserveSeat(int seatNum, String line, double price, boolean reserved) {
-        Seat requestedSeat = new Seat(seatNum,line,price,reserved);
+    public boolean reserveSeat(int seatNum, String line, int price) {
+    	Seat requestedSeat = new Seat(seatNum,line,price);
         int foundSeat = Collections.binarySearch(seatList, requestedSeat, null);
         if (foundSeat >= 0) {
-            return requestedSeat.reserve(requestedSeat);
+        	
+        	Seat us = requestedSeat.reserve(requestedSeat);
+        	if(us==null) return false;
+        	
+            return true;
         } else {
             System.out.println("The seat number " +  line+seatNum +" is not available");
             return false;
         }
     }
+    
+    public boolean validateSeat(int seatNum, String line) {
+    	String s= line + seatNum;
+    	if(!s.matches("[A-H]{1}\\d{1,2}")) {
+    		return false;
+    	}
+    	
+    	return true;
+    }
 
-
-    public boolean cancelSeat(int seatNum, String line, double price, boolean reserved){
-        Seat requestedSeat=new Seat(seatNum,line,price,reserved);
-        int foundSeat=Collections.binarySearch(seatList,requestedSeat,null);
+    public boolean cancelSeat(int seatNum, String line, List<Seat> sList){
+        Seat requestedSeat=new Seat(seatNum,line);
+        int foundSeat=Collections.binarySearch(sList,requestedSeat,null);
         if(foundSeat>=0){
+        	requestedSeat.setReserved(true);
             return requestedSeat.cancelReservation(requestedSeat);
         }
         else {
-            System.out.println("No seat "+ line+seatNum);
+            System.out.println("The seat "+ line+seatNum + " does not exists");
             return false;
         }
     }
+    
+    public void printingTheatre(String name, List<Seat> seats ) {
+    	System.out.println("Welcome " +name);
+    	
+    	System.out.println("Total Available: " +seats.size());
+    	
+    	List<Seat> sold = seats.stream().filter(s -> s.isReserved() == true).collect(Collectors.toList());
+    	Integer sum = sold.stream()
+    			.mapToInt(s -> s.getPrice())
+    			  .sum();
+    	
+    	System.out.println("Total Sold: " + sold.size());
+    	
+    	System.out.println("Total Income: " + sum);
+    }
 
+    
+    public List<Seat> updatedSeats(List<Seat> seats, int seatNumber, String line, boolean cancelOrnot){
+    	List<Seat> uList = new ArrayList<Seat>();
+    	
+    	if(cancelOrnot) {
+    		for(Seat i : seats) {
+        		if(i.getLine().equals(line) && i.getRow()==seatNumber) {
+        			i.setReserved(false);
+        			uList.add(i);
+        		}else {
+        			uList.add(i);
+        		}
+        	}
+    	}else {
+    		for(Seat i : seats) {
+        		if(i.getLine().equals(line) && i.getRow()==seatNumber) {
+        			i.setReserved(true);
+        			uList.add(i);
+        		}else {
+        			uList.add(i);
+        		}
+        	}
+    	}
+    	
+    	
+    	return uList;
+    }
 }
