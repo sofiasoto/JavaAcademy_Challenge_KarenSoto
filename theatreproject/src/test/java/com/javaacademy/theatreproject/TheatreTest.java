@@ -32,22 +32,6 @@ public class TheatreTest {
 		assertTrue(theatre.reserveSeat(seatNumber, line, 50));
 		
 		sList = theatre.updatedSeats(theatre.getSeatList(), seatNumber, line,false);
-		
-		/*sList.stream()
-		.filter(i -> i.getLine() == line && i.getRow() == seatNumber)
-		.forEach(x->x.setReserved(true));*/
-		
-		/*sList.stream()
-	    .filter(x -> x.getLine() == line && x.getRow() == seatNumber)
-	    .findAny() // here we get an Optional
-	    .ifPresentOrElse(x->x.setReserved(true),
-	            ()->{throw new RuntimeException();}
-	            );*/
-		
-		/*List<Seat> sList = theatre.getSeatList().stream()
-		        .map(x -> new Seat(seatNumber, line, 50,true))
-		        .collect(Collectors.toList());
-		        */
 	}
 	
 	@ParameterizedTest

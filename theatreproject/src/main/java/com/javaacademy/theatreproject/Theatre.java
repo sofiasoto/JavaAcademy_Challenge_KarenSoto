@@ -59,11 +59,12 @@ public class Theatre {
     
     public boolean validateSeat(int seatNum, String line) {
     	String s= line + seatNum;
-    	if(!s.matches("[A-H]{1}\\d{1,2}")) {
-    		return false;
-    	}
-    	
-    	return true;
+    	if(line.equals("")||seatNum==0) return false;
+    	if(!s.matches("[A-H]{1}\\d{1}")) {
+			return false;
+		}else {
+			return true;
+		}	
     }
 
     public boolean cancelSeat(int seatNum, String line, List<Seat> sList){
@@ -82,12 +83,34 @@ public class Theatre {
     public void printingTheatre(String name, List<Seat> seats ) {
     	System.out.println("Welcome " +name);
     	
-    	System.out.println("Total Available: " +seats.size());
-    	
     	List<Seat> sold = seats.stream().filter(s -> s.isReserved() == true).collect(Collectors.toList());
     	Integer sum = sold.stream()
+    			
+    			
     			.mapToInt(s -> s.getPrice())
     			  .sum();
+    	
+    	for(int i=0;i<seats.size();i++) {
+    		
+    		if(seats.get(i).getRow()%8==0) {
+    			if (seats.get(i).isReserved()) {
+    				System.out.print("[" + seats.get(i).getLine()+seats.get(i).getRow()+ "]\r");
+    			}else {
+    				System.out.print("." + "\r");
+    			}
+    			
+    		}else {
+    			if (seats.get(i).isReserved()) {
+    				System.out.print("[" + seats.get(i).getLine()+seats.get(i).getRow() + "] ");
+    			}else {
+    				
+    				System.out.print("."  + " ");
+    			}
+    			
+    		}
+    	}
+    	
+    	System.out.println("Total Available: " + (seats.size()-sold.size()));
     	
     	System.out.println("Total Sold: " + sold.size());
     	
